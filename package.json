@@ -12,7 +12,8 @@
     "@angular/router": "^8.0.0",
     "core-js": "2",
     "rxjs": "^6.5.2",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.9.1",
+    "three": "^0.108.0"
   },
   "scripts": {
     "ng": "ng",
