@@ -41,7 +41,7 @@ export class HelloComponent {
     this.renderer = null;
     this.mouseX = null;
     this.mouseY = null;
-    this.windowHalfX = 500;// window.innerWidth / 2;
+    this.windowHalfX = window.innerWidth / 2;
     this.windowHalfY = window.innerHeight / 2;
 
     this.materialLoader = new MTLLoader();
@@ -73,20 +73,24 @@ export class HelloComponent {
 
 
   init() {
+
     this.container = document.createElement('div');
     document.body.appendChild(this.container);
-
+    
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
     this.camera.position.z = 250;
-
+    
     // scene
-
+    
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color( 0xffffff );  //0xcce0ff );
+    this.scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
 
-    var ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
+
+    var ambientLight = new THREE.AmbientLight(0xfafaff, 0.3);
     this.scene.add(ambientLight);
 
-    var pointLight = new THREE.PointLight(0xffffff, 0.8);
+    var pointLight = new THREE.PointLight(0xfffaea, 0.3);
     this.camera.add(pointLight);
     this.scene.add(this.camera);
 
@@ -96,16 +100,17 @@ export class HelloComponent {
 
     this.materialLoader
       .setPath('assets/')
-      .load('cubedefrom.mtl', function (materials) {
+      .load('low_Poly.mtl', function (materials) {
 
         materials.preload();
 
         new OBJLoader()
           .setMaterials(materials)
           .setPath('assets/')
-          .load('cubedefrom.obj', function (object) {
+          .load('low_Poly.obj', function (object) {
             object.position.y = 3;
-            object.scale.set(5, 5, 5);
+            //object.rotateY(-1.5);
+            object.scale.set(9, 9, 9);
             scope.scene.add(object);
           }, scope.onProgress, scope.onError);
 
@@ -120,9 +125,9 @@ export class HelloComponent {
     document.addEventListener('mousemove', function onDocumentMouseMove(event){
        {
 
-        console.log('mousemove '+scope.windowHalfX);
-        scope.mouseX = (event.clientX - scope.windowHalfX) / 2;
-        scope.mouseY = (event.clientY - scope.windowHalfY) / 2;
+        //console.log('mousemove '+scope.windowHalfX);
+        scope.mouseX = (event.clientX - scope.windowHalfX) / -2;
+        scope.mouseY = (event.clientY - scope.windowHalfY) / -2;
     
       }
     }, true);
@@ -138,10 +143,12 @@ export class HelloComponent {
   }
 
   render() {
-    this.camera.position.x += (this.mouseX - this.camera.position.x) * .05;
-    this.camera.position.y += (- this.mouseY - this.camera.position.y) * .05;
+    let positivado = this.mouseX<0?-1:1;
+    this.camera.position.x += (this.mouseX/2 - this.camera.position.x) * .01;
+    this.camera.position.y += (- this.mouseY - this.camera.position.y) * .01;
+    this.camera.position.z = 90 - (this.mouseX) * .05 * positivado; 
     this.camera.lookAt(this.scene.position);
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, this.camera); 
   }
 };
 
