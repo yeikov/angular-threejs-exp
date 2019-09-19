@@ -100,15 +100,16 @@ export class HelloComponent {
 
     this.materialLoader
       .setPath('assets/')
-      .load('low_Poly.mtl', function (materials) {
+      .load('estratos.mtl', function (materials) {
 
         materials.preload();
 
         new OBJLoader()
           .setMaterials(materials)
           .setPath('assets/')
-          .load('low_Poly.obj', function (object) {
-            object.position.y = 3;
+          .load('estratos.obj', function (object) {
+            object.position.y = -30;
+            object.position.x = -30;
             //object.rotateY(-1.5);
             object.scale.set(9, 9, 9);
             scope.scene.add(object);
